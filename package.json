@@ -4,7 +4,9 @@
   "type": "module",
   "main": "server.js",
   "scripts": {
+    "postinstall": "puppeteer browsers install chrome",
     "build": "node server.js"
+    
   },
   "dependencies": {
     "bootstrap-icons": "^1.13.1",
