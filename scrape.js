@@ -7,9 +7,9 @@ import PDFDocument from 'pdfkit';
 const OCC_URL = 'https://www.occ.com.mx/';
 
 export async function scrapeOCC(searchTerm) {
-  const browser = await puppeteer.launch({
+const browser = await puppeteer.launch({
   headless: true,
-  executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || puppeteer.executablePath(),
+  executablePath: puppeteer.executablePath(), // usa el que Puppeteer descargó
   args: [
     '--no-sandbox',
     '--disable-setuid-sandbox',
@@ -22,7 +22,6 @@ export async function scrapeOCC(searchTerm) {
     '--disable-blink-features=AutomationControlled'
   ]
 });
-
   const page = await browser.newPage();
 
   // Simular navegador real
