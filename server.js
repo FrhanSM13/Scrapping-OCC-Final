@@ -8,23 +8,14 @@ import fs from 'fs';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-
-
 const app = express();
 const PORT = process.env.PORT || 3001;
-app.get('/', (req, res) => {
-    res.send(`Servidor funcionando en puerto ${PORT}`);
-});
-
-app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Servidor escuchando en el puerto ${PORT}`);
-});
 
 app.use(cors());
 app.use(express.json());
 app.use(express.static(__dirname));
 
-// Servir el archivo HTML
+// Servir el archivo HTML principal
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
@@ -33,24 +24,23 @@ app.get('/', (req, res) => {
 app.post('/search', async (req, res) => {
     try {
         const { searchTerm } = req.body;
-        
+
         if (!searchTerm || !searchTerm.trim()) {
             return res.json({ success: false, error: 'Se requiere de un término para buscar' });
         }
 
         console.log(`Buscando: ${searchTerm}`);
-        
-        // Llamar a la función del scraper
+
         const results = await scrapeOCC(searchTerm.trim());
-        
+
         if (results.length === 0) {
             return res.json({ success: false, error: '¡Ups! 😣 Parece que no hemos encontrado vacantes.' });
         }
 
         console.log(`Se encontraron ${results.length} vacantes`);
-        
-        res.json({ 
-            success: true, 
+
+        res.json({
+            success: true,
             message: `¡Yuju! 🎉 Encontramos ${results.length} vacantes, échales un vistazo.`
         });
 
@@ -62,14 +52,15 @@ app.post('/search', async (req, res) => {
 
 // Servir resultados.json desde la raíz del proyecto
 app.get('/resultados.json', (req, res) => {
-  const filePath = path.join(__dirname, '..', 'resultados.json');
-  if (fs.existsSync(filePath)) {
-    res.sendFile(filePath);
-  } else {
-    res.status(404).send({ error: 'No hay resultados.json' });
-  }
+    const filePath = path.join(__dirname, 'resultados.json');
+    if (fs.existsSync(filePath)) {
+        res.sendFile(filePath);
+    } else {
+        res.status(404).send({ error: 'No hay resultados.json' });
+    }
 });
 
+// Escuchar en el puerto que Render asigne
 app.listen(PORT, () => {
-    console.log(`Servidor en http://localhost:${PORT}`);
-}); 
+    console.log(`Servidor escuchando en http://localhost:${PORT}`);
+});
