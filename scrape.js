@@ -8,13 +8,20 @@ const OCC_URL = 'https://www.occ.com.mx/';
 
 export async function scrapeOCC(searchTerm) {
   const browser = await puppeteer.launch({
-    headless: 'new', // o true si tienes Puppeteer < 20
-    args: [
-      '--no-sandbox',
-      '--disable-setuid-sandbox',
-      '--disable-blink-features=AutomationControlled'
-    ]
-  });
+  headless: true,
+  executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || puppeteer.executablePath(),
+  args: [
+    '--no-sandbox',
+    '--disable-setuid-sandbox',
+    '--disable-dev-shm-usage',
+    '--disable-accelerated-2d-canvas',
+    '--no-first-run',
+    '--no-zygote',
+    '--single-process',
+    '--disable-gpu',
+    '--disable-blink-features=AutomationControlled'
+  ]
+});
 
   const page = await browser.newPage();
 
