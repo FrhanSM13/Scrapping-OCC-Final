@@ -12,12 +12,12 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 3001;
-app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Servidor escuchando en el puerto ${PORT}`);
+app.get('/', (req, res) => {
+    res.send(`Servidor funcionando en puerto ${PORT}`);
 });
 
-app.get('/', (req, res) => {
-    res.send(`Servidor funcionando en puerto ${process.env.PORT || 3001}`);
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Servidor escuchando en el puerto ${PORT}`);
 });
 
 app.use(cors());
