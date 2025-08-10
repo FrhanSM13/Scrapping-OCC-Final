@@ -1,25 +1,10 @@
 import puppeteer from 'puppeteer';
-import readline from 'readline';
 import fs from 'fs';
 import { Parser as Json2csvParser } from 'json2csv';
 import XLSX from 'xlsx';
 import PDFDocument from 'pdfkit';
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
-
-function askQuestion(query) {
-  return new Promise(resolve => rl.question(query, resolve));
-}
-
 const OCC_URL = 'https://www.occ.com.mx/';
-
-
-
-
-
 
 export async function scrapeOCC(searchTerm) {
   const browser = await puppeteer.launch({
@@ -287,18 +272,3 @@ export async function scrapeOCC(searchTerm) {
 
   return results;
 }
-
-async function main() {
-  const searchTerm = await askQuestion('¿Qué deseas buscar? ');
-  rl.close();
-  if (!searchTerm.trim()) {
-    console.error('❌ No ingresaste ningún término de búsqueda.');
-    process.exit(1);
-  }
-  const results = await scrapeOCC(searchTerm.trim());
-  if (results.length === 0) {
-    console.warn('⚠ No se encontraron vacantes o algo salió mal.');
-  }
-}
-
-main();
